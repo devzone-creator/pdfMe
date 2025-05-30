@@ -1,0 +1,31 @@
+{
+  "name": "pdfme",
+  "version": "1.0.0",
+  "description": "A pdf converter app made with html, css and js and uses js as backend, this is a free platform form users who wants to convert from pdf to docx",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devzone-creator/pdfMe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devzone-creator/pdfMe/issues"
+  },
+  "homepage": "https://github.com/devzone-creator/pdfMe#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "docx": "^9.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "multer": "^2.0.0",
+    "nodemon": "^3.1.10",
+    "pdf-parse": "^1.1.1",
+    "pdfkit": "^0.17.1"
+  }
+}
