@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pdfMe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="">pdfme</a>
+            </div>
+            <button class="menu-toggle" aria-label="Open navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <!--li><a href="#" id="openSignUp">Sign Up</a></li>
+                <li><a href="#" id="openSignIn">Login</a></li-->
+                <li><a href="/about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+        <!-- Sign Up Modal >
+    <div id="signUpModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeSignUp">&times;</span>
+            <form id="signUpForm">
+                <h2>Sign Up</h2>
+                <input type="text" placeholder="Username" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <- Sign In Modal >
+    <div id="signInModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeSignIn">&times;</span>
+            <form id="signInForm">
+                <h2>Sign In</h2>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div-->
+
+    <section class="carousel">
+        <img src="hero.jpg" class="carousel-img active" alt="Document 1">
+        <img src="hero2.jpg" class="carousel-img" alt="Document 2">
+        <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80" class="carousel-img" alt="Document 3">
+        <button class="carousel-btn prev">&#10094;</button>
+        <button class="carousel-btn next">&#10095;</button>
+    </section>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Transform Your Documents Instantly</h1>
+                <br>
+                <p>Experience seamless, secure, and lightning-fast PDF & DOCX conversions. No sign-up required—just upload and go!</p>
+                <div class="hero-buttons">
+                    <button id="TextToPdfBtn" class="cta-btn">Convert To PDF</button>
+                    <button id="PdfToDocxBtn" class="cta-btn">Convert To DOCX</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal for Text to PDF -->
+        <div id="textToPDFModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeTextToPDF">&times;</span>
+                <form id="textToPDFForm">
+                    <h2>Convert Text to PDF</h2>
+                    <textarea id="textInput" rows="8" placeholder="Enter text to convert to PDF"></textarea>
+                    <button type="submit">Convert to PDF</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal for PDF to DOCX -->
+        <div id="pdfToDocxModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closePdfToDocx">&times;</span>
+                <form id="pdfToDocxForm">
+                    <h2>Convert PDF to DOCX</h2>
+                    <input type="file" id="pdfFile" accept="application/pdf">
+                    <button type="submit">Upload and Convert</button>
+                </form>
+            </div>
+        </div>
+
+        <section class="testimonials">
+            <h2>What Our Users Say</h2>
+            <div class="testimonials-container">
+                <div class="testimonial">
+                    <p>"pdfMe made my life so much easier! I can convert documents in seconds."</p>
+                    <span>- Alex</span>
+                </div>
+                <div class="testimonial">
+                    <p>"The best tool for quick document conversions. Highly recommend!"</p>
+                    <span>- Jamie</span>
+                </div>
+                <div class="testimonial">
+                    <p>"Fast, reliable, and free! What more could you ask for?"</p>
+                    <span>- Taylor</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <p>&copy; 2023 pdfme. All rights reserved.</p>
+            </div>
+            <div class="footer-section">
+                <p>Made with ❤️ by Devzone-creator</p>
+            </div>
+            <div class="footer-section">
+                <ol class="footer-links">
+                    <li>
+                        <a href="#"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-brands fa-square-github"></i> GitHub</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-brands fa-square-instagram"></i> Instagram</a>
+                    </li>
+                    <li>
+                        <a href="mailto:fraizyglime@gmail.com">
+                            <i class="fa-solid fa-envelope"></i> fraizyglime@gmail.com
+                        </a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
