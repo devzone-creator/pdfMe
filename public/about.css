@@ -1,9 +1,8 @@
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f5f9f6;
-  margin: 0;
-  padding: 0;
-  color: #222;
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
 }
 .back-home-link {
   display: inline-flex;

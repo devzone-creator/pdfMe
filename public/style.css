@@ -51,7 +51,7 @@ nav ul li a {
 nav ul li a:hover {
   color: #0074d9;
 }
-/* Add to your style.css if not present */
+/* Add to your style.css if not present 
 .modal-content input[type="text"],
 .modal-content input[type="email"],
 .modal-content input[type="password"] {
@@ -60,7 +60,7 @@ nav ul li a:hover {
   margin: 10px 0 16px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
+} */
 /* Hamburger menu styles */
 .menu-toggle {
   display: none;
@@ -243,9 +243,7 @@ textarea, input[type="file"] {
   width: 100%;
   margin-bottom: 10px;
 }
-hr {
-  margin: 40px 0;
-}
+
 
 .cta-btn {
   display: inline-block;
@@ -306,10 +304,14 @@ hr {
 .close:hover {
   color: #0074d9;
 }
+
 .testimonials {
-  padding: 48px 0 32px 0;
-  text-align: center;
-  margin-bottom: 30px;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5% auto;
+  flex-direction: column;
 }
 
 .testimonials h2 {
@@ -322,9 +324,7 @@ hr {
 
 .testimonials-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 32px;
+  justify-content: space-between;
 }
 
 .testimonial {
@@ -352,11 +352,25 @@ hr {
   font-weight: 600;
   font-size: 1rem;
 }
+
+footer{
+  background: #0e3d23; /* Dark green background */
+  color: #fff;
+  padding: 24px 16px;
+  text-align: center;
+  position: relative;
+  width: 100%;
+}
 .footer-section {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+}
+.footer-section p{
+  margin: 0;
+  font-size: 1rem;
+  color: #e0ffe0;
 }
 
 .footer-links {

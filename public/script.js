@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ...existing code...
 
-// Sign Up/In modal logic
+/* Sign Up/In modal logic
 const signUpModal = document.getElementById('signUpModal');
 const signInModal = document.getElementById('signInModal');
 const openSignUp = document.getElementById('openSignUp');
@@ -124,9 +124,9 @@ openSignUp.onclick = (e) => { e.preventDefault(); signUpModal.style.display = 'b
 openSignIn.onclick = (e) => { e.preventDefault(); signInModal.style.display = 'block'; };
 closeSignUp.onclick = () => signUpModal.style.display = 'none';
 closeSignIn.onclick = () => signInModal.style.display = 'none';
-
-// Close modal when clicking outside modal content
+*
+/ Close modal when clicking outside modal content
 window.addEventListener('click', function(event) {
   if (event.target === signUpModal) signUpModal.style.display = 'none';
   if (event.target === signInModal) signInModal.style.display = 'none';
-});
+});*/
