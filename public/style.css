@@ -474,3 +474,35 @@ footer{
     padding: 12px 0;
   }
 }
+
+/* Style the font size selection section */
+form label {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* Give spacing between each radio option */
+input[type="radio"] {
+  margin-right: 5px;
+}
+
+/* Wrap label and input for better alignment */
+label[for="small"],
+label[for="medium"],
+label[for="large"] {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+/* Optional: Hover effect */
+form label:hover {
+  color: #0056b3;
+}
+
+/* Optional: Highlight selected label */
+input[type="radio"]:checked + label {
+  font-weight: bold;
+  color: #007bff;
+}

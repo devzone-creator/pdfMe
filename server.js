@@ -28,14 +28,20 @@ app.get('/about', (req, res) => {
 });
 
 app.post('/api/pdf', (req, res) => {
-  const { text } = req.body;
+  const { text, fontSize } = req.body;
   const doc = new PDFDocument();
+
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', 'attachment; filename=converted.pdf');
+
   doc.pipe(res);
-  doc.fontSize(12).text(text || 'No content provided.');
+
+  const size = parseInt(fontSize, 10) || 12; // Default to 12 if not provided
+
+  doc.fontSize(size).text(text || 'No content provided.');
   doc.end();
 });
+
 
 app.post('/api/pdf-to-docx', upload.single('pdf'), async (req, res) => {
   const pdfPath = req.file.path;
