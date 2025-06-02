@@ -506,3 +506,47 @@ input[type="radio"]:checked + label {
   font-weight: bold;
   color: #007bff;
 }
+
+/* Modal overlay */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 9999; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,0.5); /* Black with opacity */
+}
+
+/* Modal content box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto; /* 15% from top, centered horizontally */
+  padding: 20px;
+  border: 2px solid #4CAF50;
+  width: 300px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2e7d32;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #4CAF50;
+  position: relative;
+}
+
+/* Close button */
+.close {
+  color: #4CAF50;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #388e3c;
+}

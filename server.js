@@ -28,7 +28,7 @@ app.get('/about', (req, res) => {
 });
 
 app.post('/api/pdf', (req, res) => {
-  const { text, fontSize } = req.body;
+  const { text, fontSize, textAlign } = req.body;
   const doc = new PDFDocument();
 
   res.setHeader('Content-Type', 'application/pdf');
@@ -36,11 +36,16 @@ app.post('/api/pdf', (req, res) => {
 
   doc.pipe(res);
 
-  const size = parseInt(fontSize, 10) || 12; // Default to 12 if not provided
+  const size = parseInt(fontSize, 10) || 12;
+  const align = ['left', 'center', 'right'].includes(textAlign) ? textAlign : 'left';
 
-  doc.fontSize(size).text(text || 'No content provided.');
+  doc.fontSize(size).text(text || 'No content provided.', {
+    align: align
+  });
+
   doc.end();
 });
+
 
 
 app.post('/api/pdf-to-docx', upload.single('pdf'), async (req, res) => {

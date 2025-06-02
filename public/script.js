@@ -1,11 +1,16 @@
 document.getElementById('textToPDFForm').addEventListener('submit', async function(e) {
   e.preventDefault();
+
   const text = document.getElementById('textInput').value;
+  const fontSize = document.querySelector('input[name="fontSize"]:checked').value;
+  const textAlign = document.querySelector('input[name="textAlign"]:checked').value;
+
   const response = await fetch('/api/pdf', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text })
+    body: JSON.stringify({ text, fontSize, textAlign })
   });
+
   if (response.ok) {
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
@@ -16,10 +21,17 @@ document.getElementById('textToPDFForm').addEventListener('submit', async functi
     a.click();
     a.remove();
     window.URL.revokeObjectURL(url);
+
+    // Show modal success message (if using modal)
+    const modal = document.getElementById('successModal');
+    modal.style.display = 'block';
+    setTimeout(() => { modal.style.display = 'none'; }, 3000);
   } else {
     alert('Failed to convert text to PDF.');
   }
 });
+
+
 
 document.getElementById('pdfToDocxForm').addEventListener('submit', async function(e) {
   e.preventDefault();

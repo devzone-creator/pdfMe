@@ -79,17 +79,35 @@
                 <form id="textToPDFForm">
                     <h2>Convert Text to PDF</h2>
                     <textarea id="textInput" rows="8" placeholder="Enter text to convert to PDF"></textarea>
+                    
                     <label>Select Font Size:</label><br>
-                    <input type="radio" id="small" name="fontSize" value="12" checked>
-                    <label for="small">Small</label><br>
-                    <input type="radio" id="medium" name="fontSize" value="16">
-                    <label for="medium">Medium</label><br>
-                    <input type="radio" id="large" name="fontSize" value="20">
-                    <label for="large">Large</label><br><br>
+                    <input type="radio" name="fontSize" value="12" id="smallSize" checked>
+                    <label for="smallSize">Small</label>
+                    <input type="radio" name="fontSize" value="24" id="mediumSize">
+                    <label for="mediumSize">Medium</label>
+                    <input type="radio" name="fontSize" value="32" id="largeSize">
+                    <label for="largeSize">Large</label><br><br>
+
+                    <label>Text Alignment:</label><br>
+                    <input type="radio" id="alignLeft" name="textAlign" value="left" checked>
+                    <label for="alignLeft">Left</label>
+                    <input type="radio" id="alignCenter" name="textAlign" value="center">
+                    <label for="alignCenter">Center</label>
+                    <input type="radio" id="alignRight" name="textAlign" value="right">
+                    <label for="alignRight">Right</label><br><br>
+
                     <button type="submit">Convert to PDF</button>
                 </form>
             </div>
         </div>
+
+        <div id="successModal" class="modal">
+            <div class="modal-content">
+                <span id="closeSuccessModal" class="close">&times;</span>
+                <p><strong>Success!</strong> PDF successfully generated and downloaded.</p>
+            </div>
+        </div>
+
 
         <!-- Modal for PDF to DOCX -->
         <div id="pdfToDocxModal" class="modal">
