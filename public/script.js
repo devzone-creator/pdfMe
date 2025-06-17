@@ -1,95 +1,3 @@
-document.getElementById('textToPDFForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  const text = document.getElementById('textInput').value;
-  const fontSize = document.querySelector('input[name="fontSize"]:checked').value;
-  const textAlign = document.querySelector('input[name="textAlign"]:checked').value;
-
-  const response = await fetch('/api/pdf', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, fontSize, textAlign })
-  });
-
-  if (response.ok) {
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'converted.pdf';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
-
-    // Show modal success message (if using modal)
-    const modal = document.getElementById('successModal');
-    modal.style.display = 'block';
-    setTimeout(() => { modal.style.display = 'none'; }, 3000);
-  } else {
-    alert('Failed to convert text to PDF.');
-  }
-});
-// ...existing code...
-
-// Hamburger menu logic
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
-
-// Toggle menu on button click
-menuToggle.addEventListener('click', function(e) {
-  e.stopPropagation();
-  navLinks.classList.toggle('open');
-});
-
-// Close menu when clicking a link (for mobile UX)
-navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    navLinks.classList.remove('open');
-  });
-});
-
-// Close menu when clicking outside
-document.addEventListener('click', function(e) {
-  if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-    navLinks.classList.remove('open');
-  }
-});
-
-// ...existing code...
-
-
-document.getElementById('pdfToDocxForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const fileInput = document.getElementById('pdfFile');
-  if (!fileInput.files.length) {
-    alert('Please select a PDF file.');
-    return;
-  }
-  const formData = new FormData();
-  formData.append('pdf', fileInput.files[0]);
-  const response = await fetch('/api/pdf-to-docx', {
-    method: 'POST',
-    body: formData
-  });
-  if (response.ok) {
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'converted.docx';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
-  } else {
-    alert('Failed to convert PDF to DOCX.');
-  }
-});
-
-// ...existing code...
-
-// Modal logic
 const textToPDFModal = document.getElementById('textToPDFModal');
 const pdfToDocxModal = document.getElementById('pdfToDocxModal');
 const openTextToPdf = document.getElementById('TextToPdfBtn');
@@ -137,10 +45,87 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 5000);
 });
 
-document.getElementById('menu-toggle').addEventListener('click', function(e) {
-  e.preventDefault();
-  e.stopPropagation();
 
+document.getElementById('textToPDFForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const text = document.getElementById('textInput').value;
+  const fontSize = document.querySelector('input[name="fontSize"]:checked').value;
+  const textAlign = document.querySelector('input[name="textAlign"]:checked').value;
+
+  const response = await fetch('/api/pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, fontSize, textAlign })
+  });
+
+  if (response.ok) {
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'converted.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+    // Show modal success message (if using modal)
+    const modal = document.getElementById('successModal');
+    modal.style.display = 'block';
+    setTimeout(() => { modal.style.display = 'none'; }, 3000);
+  } else {
+    alert('Failed to convert text to PDF.');
+  }
+});
+
+
+document.getElementById('pdfToDocxForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const fileInput = document.getElementById('pdfFile');
+  if (!fileInput.files.length) {
+    alert('Please select a PDF file.');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('pdf', fileInput.files[0]);
+  const response = await fetch('/api/pdf-to-docx', {
+    method: 'POST',
+    body: formData
+  });
+  if (response.ok) {
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'converted.docx';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } else {
+    alert('Failed to convert PDF to DOCX.');
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const menuToggle = document.getElementById('menu-toggle');
   const navLinks = document.getElementById('nav-links');
-  navLinks.classList.toggle('open');
+
+  menuToggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    navLinks.classList.toggle('open');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+      navLinks.classList.remove('open');
+    }
+  });
 });

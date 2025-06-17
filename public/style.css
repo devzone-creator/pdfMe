@@ -119,7 +119,9 @@ nav {
 .cta-btn:hover {
   background: #0056b3;
 }
-
+#mainModal{
+  display: none;
+}
 /* Modals */
 .modal {
   position: fixed;
@@ -211,9 +213,6 @@ nav {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-  }
   .carousel{
     height: 50vh;
   }
@@ -227,16 +226,28 @@ nav {
   .nav-links {
     position: absolute;
     top: 100%;
-    display: none;
+    left: 0;
     right: 0;
     background: #fff;
     flex-direction: column;
-    width: 200px;
-    transform: translateY(-200%);
-    transition: transform 0.3s ease;
+    align-items: flex-start;
+    display: none;
+    padding: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    z-index: 100;
+    gap: 0;
   }
   .nav-links.open {
-    transform: translateY(0);
+    display: flex;
+  }
+  .nav-links li {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+  }
+  .nav-links li a {
+    width: 100%;
+    display: block;
+    font-size: 1.1rem;
   }
   .hero-content h1 {
     font-size: 2rem;
@@ -248,5 +259,14 @@ nav {
 @media (min-width: 769px) {
   .testimonials-container {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  nav {
+    position: relative;
+  }
+  .menu-toggle {
+    display: block;
   }
 }

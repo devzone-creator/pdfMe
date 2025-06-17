@@ -13,10 +13,10 @@
             <div class="logo">
                 <a href="">pdfme</a>
             </div>
-            <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation">
-                <i class="fa fa-bars"></i>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
             </button>
-            <ul class="nav-links" id="nav-links>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About</a></li>
             </ul>
@@ -37,14 +37,27 @@
                 <h1>Transform Your Documents Instantly</h1>
                 <p>Experience seamless, secure, and lightning-fast PDF & DOCX conversions. No sign-up required—just upload and go!</p>
                 <div class="hero-buttons">
-                    <button id="TextToPdfBtn" class="cta-btn">Convert To PDF</button>
-                    <button id="PdfToDocxBtn" class="cta-btn">Convert To DOCX</button>
+                    <button id="openFunctionModals" class="cta-btn">Click To Convert</button>
                 </div>
             </div>
         </section>
 
+        <!-- Site Functions -->
+        <section id="mainModal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Choose a Conversion Type</h2>
+                <button id="textToPDFBtn" class="function-btn">Text to PDF</button>
+                <button id="pdfToDocxBtn" class="function-btn">PDF to DOCX</button>
+                <button id="docxToPdfBtn" class="function-btn">DOCX to PDF</button>
+                <button id="pdfToTextBtn" class="function-btn">PDF to Text</button>
+                <button id="pdfToImageBtn" class="function-btn">PDF to Image</button>
+                <button id="imageToPdfBtn" class="function-btn">Image to PDF</button>
+            </div>
+        </section>
+
         <!-- Modal for Text to PDF -->
-        <div id="textToPDFModal" class="modal">
+        <section id="textToPDFModal" class="modal">
             <div class="modal-content">
                 <span class="close" id="closeTextToPDF">&times;</span>
                 <form id="textToPDFForm">
@@ -90,7 +103,7 @@
                     <button type="submit">Upload and Convert</button>
                 </form>
             </div>
-        </div>
+        </section>
 
         <section class="testimonials">
             <h2>What Our Users Say</h2>
