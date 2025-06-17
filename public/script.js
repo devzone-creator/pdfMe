@@ -30,7 +30,33 @@ document.getElementById('textToPDFForm').addEventListener('submit', async functi
     alert('Failed to convert text to PDF.');
   }
 });
+// ...existing code...
 
+// Hamburger menu logic
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+// Toggle menu on button click
+menuToggle.addEventListener('click', function(e) {
+  e.stopPropagation();
+  navLinks.classList.toggle('open');
+});
+
+// Close menu when clicking a link (for mobile UX)
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+  });
+});
+
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+    navLinks.classList.remove('open');
+  }
+});
+
+// ...existing code...
 
 
 document.getElementById('pdfToDocxForm').addEventListener('submit', async function(e) {
@@ -111,34 +137,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 5000);
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  // ...existing code...
+document.getElementById('menu-toggle').addEventListener('click', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
 
-  // Hamburger menu logic
-  const menuToggle = document.querySelector('.menu-toggle');
-  const navLinks = document.querySelector('.nav-links');
-  menuToggle.addEventListener('click', function() {
-    navLinks.classList.toggle('open');
-  });
+  const navLinks = document.getElementById('nav-links');
+  navLinks.classList.toggle('open');
 });
-
-// ...existing code...
-
-/* Sign Up/In modal logic
-const signUpModal = document.getElementById('signUpModal');
-const signInModal = document.getElementById('signInModal');
-const openSignUp = document.getElementById('openSignUp');
-const openSignIn = document.getElementById('openSignIn');
-const closeSignUp = document.getElementById('closeSignUp');
-const closeSignIn = document.getElementById('closeSignIn');
-
-openSignUp.onclick = (e) => { e.preventDefault(); signUpModal.style.display = 'block'; };
-openSignIn.onclick = (e) => { e.preventDefault(); signInModal.style.display = 'block'; };
-closeSignUp.onclick = () => signUpModal.style.display = 'none';
-closeSignIn.onclick = () => signInModal.style.display = 'none';
-*
-/ Close modal when clicking outside modal content
-window.addEventListener('click', function(event) {
-  if (event.target === signUpModal) signUpModal.style.display = 'none';
-  if (event.target === signInModal) signInModal.style.display = 'none';
-});*/
