@@ -1,3 +1,14 @@
+document.getElementById('openFunctionModals').addEventListener('click', function(e) {
+  e.preventDefault();
+  const modal = document.getElementById('modal');
+  modal.style.display = 'block';
+});
+document.getElementById('closeModal').addEventListener('click', function() {
+  const modal = document.getElementById('modal');
+  modal.style.display = 'none';
+});
+
+
 const textToPDFModal = document.getElementById('textToPDFModal');
 const pdfToDocxModal = document.getElementById('pdfToDocxModal');
 const openTextToPdf = document.getElementById('TextToPdfBtn');
@@ -71,9 +82,9 @@ document.getElementById('textToPDFForm').addEventListener('submit', async functi
     window.URL.revokeObjectURL(url);
 
     // Show modal success message (if using modal)
-    const modal = document.getElementById('successModal');
-    modal.style.display = 'block';
-    setTimeout(() => { modal.style.display = 'none'; }, 3000);
+    const Tmodal = document.getElementById('successModal');
+    Tmodal.style.display = 'block';
+    setTimeout(() => { Tmodal.style.display = 'none'; }, 3000);
   } else {
     alert('Failed to convert text to PDF.');
   }

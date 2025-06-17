@@ -43,21 +43,41 @@
         </section>
 
         <!-- Site Functions -->
-        <section id="mainModal">
+        <section id="modal" class="modal">
             <div class="modal-content">
                 <span class="close" id="closeModal">&times;</span>
                 <h2>Choose a Conversion Type</h2>
-                <button id="textToPDFBtn" class="function-btn">Text to PDF</button>
-                <button id="pdfToDocxBtn" class="function-btn">PDF to DOCX</button>
-                <button id="docxToPdfBtn" class="function-btn">DOCX to PDF</button>
-                <button id="pdfToTextBtn" class="function-btn">PDF to Text</button>
-                <button id="pdfToImageBtn" class="function-btn">PDF to Image</button>
-                <button id="imageToPdfBtn" class="function-btn">Image to PDF</button>
+                <ul>
+                    <li>
+                        <img src="" alt="">
+                        <button id="textToPDFBtn" class="function-btn">Text to PDF</button>
+                    </li>
+                    <li>
+                        <img src="" alt="">
+                        <button id="pdfToDocxBtn" class="function-btn">PDF to DOCX</button>
+                    </li>
+                    <li>
+                        <img src="" alt="">
+                        <button id="docxToPdfBtn" class="function-btn">DOCX to PDF</button>
+                    </li>
+                    <li>
+                        <img src="" alt="">
+                        <button id="pdfToTextBtn" class="function-btn">PDF to Text</button>
+                    </li>
+                    <li>
+                        <img src="" alt="">
+                        <button id="pdfToImageBtn" class="function-btn">PDF to Image</button>
+                    </li>
+                    <li>
+                        <img src="" alt="">
+                        <button id="imageToPdfBtn" class="function-btn">Image to PDF</button>
+                    </li>
+                </ul>
             </div>
         </section>
 
-        <!-- Modal for Text to PDF -->
-        <section id="textToPDFModal" class="modal">
+        <!-- Modal for Text to PDF ->
+        <section id="textToPDFModal" class="Tmodal">
             <div class="modal-content">
                 <span class="close" id="closeTextToPDF">&times;</span>
                 <form id="textToPDFForm">
@@ -93,7 +113,7 @@
         </div>
 
 
-        <!-- Modal for PDF to DOCX -->
+        <- Modal for PDF to DOCX ->
         <div id="pdfToDocxModal" class="modal">
             <div class="modal-content">
                 <span class="close" id="closePdfToDocx">&times;</span>
@@ -121,7 +141,25 @@
                     <span>~ <i>Rashida</i></span>
                 </div>
             </div>
-        </section>
+            <button id="feedModal" style="margin-top: 20px;" class="cta-btn">Give Feedback</button>
+
+            <div id="feedbackModal" class="feedback">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeModalBtn">&times;</span>
+                    <h2>Feedback</h2>
+                    <form action="">
+                        <label for="name">Name:</label><br/>
+                        <input type="text" id="name" name="name" required><br/><br/>
+
+                        <label for="message">Your Feedback:</label><br/>
+                        <textarea id="message" name="message" rows="4" required></textarea><br/><br/>
+
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+        </section-->
     </main>
 
     <footer>
