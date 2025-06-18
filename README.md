@@ -4,13 +4,13 @@
 
 ## 🚀 Overview
 
-**pdfMe** is an open-source, developer-friendly platform for converting documents between formats (PDF, DOCX, TXT, Images, and more).  
+**file frenzy** is an open-source, developer-friendly platform for converting documents between formats (PDF, DOCX, TXT, Images, and more).  
 It leverages both Node.js and Python for robust, in-memory conversions, supporting a wide range of document workflows.
 
 link: https://filefrenzy.onrender.com
 ---
 
-## ❓ What is pdfMe?
+## ❓ What is file frenzy?
 
 pdfMe is a flexible, extensible document conversion tool built for:
 
@@ -27,7 +27,7 @@ pdfMe is a flexible, extensible document conversion tool built for:
 - 📝 ➡️ 📄 **DOCX to PDF** (with formatting, via Python)
 - 📄 ➡️ 📃 **PDF to TXT**
 
-_All conversions are handled in-memory—no files are stored on disk!_
+_All conversions are handled in-memory— no files are stored on disk!_
 
 ---
 
@@ -35,7 +35,7 @@ _All conversions are handled in-memory—no files are stored on disk!_
 
 Document conversion is a common but often frustrating task.  
 Many tools are closed-source, limited, or require uploading sensitive files to third-party servers.  
-**pdfMe** aims to be:
+**file frenzy** aims to be:
 
 - 🔓 **Open**: Source code is available for review and improvement.
 - 🤝 **Collaborative**: Designed for contributions and new features.
@@ -66,7 +66,7 @@ I am seeking:
 ## 📬 Get in Touch
 
 - 📂 **GitHub Issues**: [Open an issue](https://github.com/pdfme/issues)
-- 📧 **Email**: [your.email@example.com](mailto:frenzyfile@example.com)
+- 📧 **Email**: [frenzyfile@egmail.com](mailto:frenzyfile@example.com)
 
 ---
 
@@ -92,7 +92,7 @@ I am seeking:
 
 ## 🙏 Thank You!
 
-Thank you for checking out **pdfMe**!  
+Thank you for checking out **file frenzy**!  
 If you’re interested in collaborating, mentoring, or just want to chat about document conversion, please reach out.
 
 **Let’s build something awesome together!**
