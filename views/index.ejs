@@ -26,6 +26,7 @@
     <section class="carousel">
         <img src="hero.jpg" class="carousel-img active" alt="Document 1">
         <img src="hero2.jpg" class="carousel-img" alt="Document 2">
+        <img src="bg.png" class="carousel-img" alt="Document 3">
         <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80" class="carousel-img" alt="Document 3">
         <button class="carousel-btn prev">&#10094;</button>
         <button class="carousel-btn next">&#10095;</button>
@@ -49,35 +50,35 @@
                 <h2>Choose a Conversion Type</h2>
                 <ul>
                     <li>
-                        <img src="" alt="">
+                        <img src="d1.png" alt="">
                         <button id="textToPDFBtn" class="function-btn">Text to PDF</button>
                     </li>
                     <li>
-                        <img src="" alt="">
+                        <img src="d2.png" alt="">
                         <button id="pdfToDocxBtn" class="function-btn">PDF to DOCX</button>
                     </li>
                     <li>
-                        <img src="" alt="">
+                        <img src="d3.png" alt="">
                         <button id="docxToPdfBtn" class="function-btn">DOCX to PDF</button>
                     </li>
                     <li>
-                        <img src="" alt="">
+                        <img src="d5.png" alt="">
                         <button id="pdfToTextBtn" class="function-btn">PDF to Text</button>
                     </li>
                     <li>
-                        <img src="" alt="">
+                        <img src="d4.png" alt="">
                         <button id="pdfToImageBtn" class="function-btn">PDF to Image</button>
                     </li>
                     <li>
-                        <img src="" alt="">
+                        <img src="d6.png" alt="">
                         <button id="imageToPdfBtn" class="function-btn">Image to PDF</button>
                     </li>
                 </ul>
             </div>
         </section>
 
-        <!-- Modal for Text to PDF ->
-        <section id="textToPDFModal" class="Tmodal">
+        <!-- Modal for Text to PDF -->
+        <section id="textToPDFModal" class="modal">
             <div class="modal-content">
                 <span class="close" id="closeTextToPDF">&times;</span>
                 <form id="textToPDFForm">
@@ -103,7 +104,7 @@
                     <button type="submit">Convert to PDF</button>
                 </form>
             </div>
-        </div>
+        </section>
 
         <div id="successModal" class="modal">
             <div class="modal-content">
@@ -113,8 +114,8 @@
         </div>
 
 
-        <- Modal for PDF to DOCX ->
-        <div id="pdfToDocxModal" class="modal">
+        <!-- Modal for PDF to DOCX -->
+        <section id="pdfToDocxModal" class="modal">
             <div class="modal-content">
                 <span class="close" id="closePdfToDocx">&times;</span>
                 <form id="pdfToDocxForm">
@@ -125,7 +126,53 @@
             </div>
         </section>
 
-        <section class="testimonials">
+        <section id="docxToPDFModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeDocxToPDF">&times;</span>
+                <form id="docxToPDFForm">
+                    <h2>Convert DOCX to PDF</h2>
+                    <input type="file" id="docxFile" accept=".docx" required>
+                    <button type="submit">Upload and Convert</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="pdfToTextModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closePdfToText">&times;</span>
+                <form id="pdfToTextForm">
+                    <h2>Convert PDF to Text</h2>
+                    <input type="file" id="pdfToTextFile" accept="application/pdf" required>
+                    <button type="submit">Upload and Extract Text</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="pdfToImageModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closePdfToImage">&times;</span>
+                <form id="pdfToImageForm">
+                    <h2>Convert PDF to Image</h2>
+                    <input type="file" id="pdfToImageFile" accept="application/pdf" required>
+                    <button type="submit">Upload and Convert</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="imageToPDFModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeImageToPDF">&times;</span>
+                <form id="imageToPDFForm">
+                    <h2>Convert Image to PDF</h2>
+                    <input type="file" id="imageToPDFFile" accept="image/png, image/jpeg, image/jpg" required>
+                    <button type="submit">Upload and Convert</button>
+                </form>
+            </div>
+        </section>
+
+
+
+        <!--section class="testimonials">
             <h2>What Our Users Say</h2>
             <div class="testimonials-container">
                 <div class="testimonial">

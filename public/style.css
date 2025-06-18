@@ -119,6 +119,7 @@ nav {
 .cta-btn:hover {
   background: #0056b3;
 }
+
 /***********/
 .modal{
   display: none;
@@ -158,12 +159,20 @@ nav {
 }
 .modal-content ul li{
   margin: 0.5rem 0;
+  display: flex;
+  margin: 4px;
+}
+.modal-content ul li img{
+  max-width: 40px;
+  border-radius: 100%;
+  margin-right: 10px;
 }
 .modal-content ul li button{
   color: #000;
   background: transparent;
+  font-weight: 300;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   text-decoration: none;
 }
 
@@ -196,9 +205,10 @@ nav {
   font-weight: bold;
   color: #555;
 }
+
 /* Modal background */
 .modal {
-  display: none; /* Hidden by default */
+  display: none;
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -206,10 +216,10 @@ nav {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5); /* black overlay */
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Modal box */
+/* Modal boxes */
 .modal-content {
   background-color: #fff;
   margin: 10% auto;
@@ -246,6 +256,244 @@ nav {
   font-size: 1.3rem;
   text-decoration: none;
 }
+/* Form styling */
+#textToPDFForm h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+#textInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+label {
+  font-weight: 500;
+  margin-right: 0.5rem;
+  color: #444;
+}
+
+input[type="radio"] {
+  margin-right: 0.3rem;
+}
+
+button[type="submit"] {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #1e40af;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+
+  #textToPDFForm h2 {
+    font-size: 1.25rem;
+  }
+
+  button[type="submit"] {
+    font-size: 0.95rem;
+  }
+}
+
+/* Simple fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#pdfToDocxForm h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+#pdfFile {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+#pdfToDocxForm button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #10b981; /* Emerald green */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#pdfToDocxForm button[type="submit"]:hover {
+  background-color: #059669;
+}
+
+#docxToPDFForm h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+#docxFile {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+#docxToPDFForm button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #8b5cf6; /* Violet */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#docxToPDFForm button[type="submit"]:hover {
+  background-color: #7c3aed;
+}
+
+#pdfToTextForm h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+#pdfToTextFile {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+#pdfToTextForm button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #f97316; /* Orange */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#pdfToTextForm button[type="submit"]:hover {
+  background-color: #ea580c;
+}
+
+#pdfToImageForm h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+#pdfToImageFile {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+#pdfToImageForm button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #0ea5e9; /* Sky blue */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#pdfToImageForm button[type="submit"]:hover {
+  background-color: #0284c7;
+}
+
+#imageToPDFForm h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+#imageToPDFFile {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+#imageToPDFForm button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #22c55e; /* Green */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#imageToPDFForm button[type="submit"]:hover {
+  background-color: #16a34a;
+}
+
 
 /* Footer */
 .footer-links {
@@ -338,48 +586,3 @@ nav {
     display: block;
   }
 }
-
-/**
-#mainModal{
-  display: none;
-}
-.modal {
-  display: none;     
-  align-items: center;              
-  justify-content: center;         
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
-  transition: background 0.3s;
-}
-
-.feedback{
-  display: none;
-}
-
-/* Modal box *
-.modal-content {
-  background: #fff;
-  border-radius: 10px;
-  padding: 2rem;
-  max-width: 400px;
-  width: 90vw;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-  position: relative;
-  margin: 0;
-}
-.Tmodal{
-  display: none;
-}
-
-.modal .close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.75rem;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-**/
