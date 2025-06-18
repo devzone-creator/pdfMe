@@ -12,6 +12,7 @@ const morgan = require('morgan');
 const fs = require('fs');
 const { execFile } = require('child_process');
 const os = require('os');
+const nodemailer = require('nodemailer');
 
 
 const app = express();
@@ -226,6 +227,35 @@ app.post('/api/image-to-pdf', upload.single('image'), async (req, res) => {
   } finally {
     fs.unlink(imgPath, () => {});
     fs.unlink(pdfPath, () => {});
+  }
+});
+
+// Feedback endpoint
+app.post('/api/feedback', express.json(), async (req, res) => {
+  const { name, email, message } = req.body;
+
+  // Configure transporter for Gmail
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'frenzyfile@gmail.com',
+      pass: 'fhah sviq pwzy ywnr'
+    }
+  });
+
+  const mailOptions = {
+    from: email,
+    to: 'frenzyfile@gmail.com',
+    subject: `FileFrenzy Feedback from ${name}`,
+    text: `Name: ${name}\n\n${message}`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.json({ success: true, message: 'Feedback sent!' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to send feedback.' });
   }
 });
 

@@ -348,4 +348,28 @@ if (pdfToTextForm) {
       feedbackModal.style.display = 'none';
     }
   });
+
+  const feedbackForm = document.getElementById('feedbackForm');
+  if (feedbackForm) {
+    feedbackForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = feedbackForm.querySelector('[name="name"]').value;
+      const email = feedbackForm.querySelector('[name="email"]').value;
+      const message = feedbackForm.querySelector('[name="message"]').value;
+
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message })
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert('Thank you for your feedback!');
+        feedbackForm.reset();
+      } else {
+        alert('Failed to send feedback. Please try again later.');
+      }
+    });
+  }
 });
