@@ -26,8 +26,6 @@ pdfMe is a flexible, extensible document conversion tool built for:
 - 📄 ➡️ 📝 **PDF to DOCX** (with formatting, via Python)
 - 📝 ➡️ 📄 **DOCX to PDF** (with formatting, via Python)
 - 📄 ➡️ 📃 **PDF to TXT**
-- 📄 ➡️ 🖼️ **PDF to Image** (Python-powered)
-- 🖼️ ➡️ 📄 **Image to PDF** (Python-powered)
 
 _All conversions are handled in-memory—no files are stored on disk!_
 
