@@ -495,6 +495,110 @@ button[type="submit"]:hover {
 }
 
 
+/* Base feedback modal */
+.feedback {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.feedback.show {
+  display: flex;
+}
+
+/* Modal content styling */
+.feedback .modal-content {
+  background-color: #ffffff;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  padding: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+/* Form styles */
+.feedback form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+.feedback form input[type="text"],
+.feedback form textarea {
+  width: 100%;
+  padding: 0.65rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  margin-bottom: 1.2rem;
+  resize: vertical;
+}
+
+.feedback form button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #6366f1; /* Indigo */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.feedback form button[type="submit"]:hover {
+  background-color: #4f46e5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .feedback .modal-content {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 /* Footer */
 .footer-links {
   list-style: none;

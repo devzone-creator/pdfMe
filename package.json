@@ -24,12 +24,15 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "mammoth": "^1.9.1",
+    "morgan": "^1.10.0",
     "multer": "^2.0.1",
+    "node-fetch": "^3.3.2",
     "nodemon": "^3.1.10",
     "pdf-parse": "^1.1.1",
     "pdf-poppler": "^0.2.1",
     "pdfkit": "^0.17.1",
-    "pdfmake": "^0.2.20"
+    "pdfmake": "^0.2.20",
+    "puppeteer": "^24.10.1"
   },
   "type": "commonjs"
 }

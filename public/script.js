@@ -202,8 +202,15 @@ document.addEventListener('DOMContentLoaded', function() {
         body: formData
       });
       if (response.ok) {
-        const text = await response.text();
-        alert('Extracted Text:\n\n' + text);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'converted.txt';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
         document.getElementById('pdfToTextModal').style.display = 'none';
       } else {
         alert('Failed to extract text from PDF.');
@@ -298,4 +305,27 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // Feedback Modal Logic
+  const feedModalBtn = document.getElementById('feedModal');
+  const feedbackModal = document.getElementById('feedbackModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+
+  if (feedModalBtn && feedbackModal) {
+    feedModalBtn.addEventListener('click', function() {
+      feedbackModal.style.display = 'block';
+    });
+  }
+  if (closeModalBtn && feedbackModal) {
+    closeModalBtn.addEventListener('click', function() {
+      feedbackModal.style.display = 'none';
+    });
+  }
+
+  // Optional: Close feedback modal when clicking outside modal content
+  window.addEventListener('click', function(event) {
+    if (event.target === feedbackModal) {
+      feedbackModal.style.display = 'none';
+    }
+  });
 });
