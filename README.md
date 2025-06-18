@@ -67,9 +67,8 @@ I am seeking:
 
 ## 📬 Get in Touch
 
-- 📂 **GitHub Issues**: [Open an issue](https://github.com/your-repo/issues)
-- 📧 **Email**: [your.email@example.com](mailto:your.email@example.com)
-- 🐦 **Twitter/X**: [@yourhandle](https://twitter.com/yourhandle)
+- 📂 **GitHub Issues**: [Open an issue](https://github.com/pdfme/issues)
+- 📧 **Email**: [your.email@example.com](mailto:frenzyfile@example.com)
 
 ---
 
