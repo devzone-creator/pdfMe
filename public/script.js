@@ -184,23 +184,28 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+const pdfToTextForm = document.getElementById('pdfToTextForm');
+if (pdfToTextForm) {
+  pdfToTextForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const fileInput = document.getElementById('pdfToTextFile');
+    const submitBtn = pdfToTextForm.querySelector('button[type="submit"]');
 
-  // PDF to Text Form
-  const pdfToTextForm = document.getElementById('pdfToTextForm');
-  if (pdfToTextForm) {
-    pdfToTextForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const fileInput = document.getElementById('pdfToTextFile');
-      if (!fileInput.files.length) {
-        alert('Please select a PDF file.');
-        return;
-      }
-      const formData = new FormData();
-      formData.append('pdf', fileInput.files[0]);
-      const response = await fetch('/api/pdf-to-text', {
+    if (!fileInput.files.length) {
+      alert('Please select a PDF file.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('pdf', fileInput.files[0]);
+    submitBtn.disabled = true;
+
+    try {
+      const response = await fetch(`/api/pdf-to-text?_=${Date.now()}`, {
         method: 'POST',
         body: formData
       });
+
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -208,15 +213,30 @@ document.addEventListener('DOMContentLoaded', function() {
         a.href = url;
         a.download = 'converted.txt';
         document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
+
+        // Close modal first
         document.getElementById('pdfToTextModal').style.display = 'none';
+
+        // Delay the download trigger to allow modal to fully disappear
+        setTimeout(() => {
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+        }, 150);
       } else {
         alert('Failed to extract text from PDF.');
       }
-    });
-  }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred. Try again.');
+    } finally {
+      submitBtn.disabled = false;
+      fileInput.value = '';
+    }
+  });
+}
+
+
 
   // PDF to Image Form
   const pdfToImageForm = document.getElementById('pdfToImageForm');

@@ -116,47 +116,125 @@ app.post('/api/docx-to-pdf', upload.single('docx'), async (req, res) => {
   }
 });
 
-// PDF to Text
+// PDF to Text conversion endpoint
 app.post('/api/pdf-to-text', upload.single('pdf'), async (req, res) => {
   if (!req.file) return res.status(400).send('No PDF file uploaded.');
+
+  const tmpDir = os.tmpdir();
+  const pdfPath = path.join(tmpDir, `input_${Date.now()}.pdf`);
+  const txtPath = path.join(tmpDir, `output_${Date.now()}.txt`);
+
   try {
-    const data = await pdfParse(req.file.buffer);
-    const text = data.text || '';
+    fs.writeFileSync(pdfPath, req.file.buffer);
+
+    await new Promise((resolve, reject) => {
+      execFile('python3', [
+        path.join(__dirname, 'pdf2txt.py'),
+        pdfPath,
+        txtPath
+      ], (error, stdout, stderr) => {
+        if (error) {
+          console.error(stderr);
+          return reject(error);
+        }
+        resolve();
+      });
+    });
+
+    const txtBuffer = fs.readFileSync(txtPath);
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Content-Disposition', 'attachment; filename=converted.txt');
-    res.send(text);
+    res.send(txtBuffer);
   } catch (err) {
     console.error(err);
     res.status(500).send('Failed to extract text from PDF.');
+  } finally {
+    fs.unlink(pdfPath, () => {});
+    fs.unlink(txtPath, () => {});
   }
 });
 
 // PDF to Image (returns PNG of first page, placeholder)
 app.post('/api/pdf-to-image', upload.single('pdf'), async (req, res) => {
   if (!req.file) return res.status(400).send('No PDF file uploaded.');
-  // Placeholder: returns a 1x1 transparent PNG
-  res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Content-Disposition', 'attachment; filename=converted.png');
-  res.end(Buffer.from('89504e470d0a1a0a0000000d4948445200000001000000010806000000' +
-    '1f15c4890000000a49444154789c6360000002000100', 'hex'));
+  const tmpDir = os.tmpdir();
+  const pdfPath = path.join(tmpDir, `input_${Date.now()}.pdf`);
+  const imgPath = path.join(tmpDir, `output_${Date.now()}.png`);
+
+  try {
+    fs.writeFileSync(pdfPath, req.file.buffer);
+
+    await new Promise((resolve, reject) => {
+      execFile('python3', [
+        path.join(__dirname, 'pdf_to_image_worker.py'),
+        pdfPath,
+        imgPath
+      ], (error, stdout, stderr) => {
+        if (error) {
+          console.error(stderr);
+          return reject(error);
+        }
+        resolve();
+      });
+    });
+
+    const imgBuffer = fs.readFileSync(imgPath);
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Content-Disposition', 'attachment; filename=converted.png');
+    res.send(imgBuffer);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Failed to convert PDF to Image.');
+  } finally {
+    fs.unlink(pdfPath, () => {});
+    fs.unlink(imgPath, () => {});
+  }
 });
 
 // Image to PDF
 app.post('/api/image-to-pdf', upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).send('No image file uploaded.');
-  const doc = new PDFDocument();
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', 'attachment; filename=converted.pdf');
-  doc.pipe(res);
+  const tmpDir = os.tmpdir();
+  const ext = path.extname(req.file.originalname) || '.png';
+  const imgPath = path.join(tmpDir, `input_${Date.now()}${ext}`);
+  const pdfPath = path.join(tmpDir, `output_${Date.now()}.pdf`);
+
   try {
-    doc.image(req.file.buffer, { fit: [500, 700], align: 'center', valign: 'center' });
-    doc.end();
+    fs.writeFileSync(imgPath, req.file.buffer);
+
+    await new Promise((resolve, reject) => {
+      execFile('python3', [
+        path.join(__dirname, 'image2pdf.py'),
+        imgPath,
+        pdfPath
+      ], (error, stdout, stderr) => {
+        if (error) {
+          console.error(stderr);
+          return reject(error);
+        }
+        resolve();
+      });
+    });
+
+    const pdfBuffer = fs.readFileSync(pdfPath);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=converted.pdf');
+    res.send(pdfBuffer);
   } catch (err) {
+    console.error(err);
     res.status(500).send('Failed to convert image to PDF.');
-    doc.end();
+  } finally {
+    fs.unlink(imgPath, () => {});
+    fs.unlink(pdfPath, () => {});
   }
 });
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+});
+
+// Log received file information (for debugging)
+app.use((req, res, next) => {
+  console.log('Received file:', req.file ? req.file.originalname : 'none', 'size:', req.file ? req.file.size : 0);
+  next();
 });
