@@ -1,10 +1,7 @@
 const express = require('express');
 const multer = require('multer');
-const pdfParse = require('pdf-parse');
 const PDFDocument = require('pdfkit');
-const { Document, Packer, Paragraph } = require('docx');
 const cors = require('cors');
-const fetch = require('node-fetch');
 const path = require('path');
 const mammoth = require('mammoth');
 const puppeteer = require('puppeteer');
