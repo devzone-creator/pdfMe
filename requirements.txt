@@ -76,7 +76,7 @@ packaging==25.0
 pandas==2.2.3
 pandocfilters==1.5.1
 parso==0.8.4
-pdf2docx==0.5.8
+pdf2docx
 pdfminer.six==20250506
 pexpect==4.9.0
 pillow==11.2.1
