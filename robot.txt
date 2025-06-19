@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://https://filefrenzy.onrender.com/sitemap.xml
