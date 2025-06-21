@@ -127,7 +127,7 @@ app.post('/api/pdf-to-text', upload.single('pdf'), async (req, res) => {
 
     await new Promise((resolve, reject) => {
       execFile('python3', [
-        path.join(__dirname, 'pdf2txt.py'),
+        path.join(__dirname, 'python', 'pdf2txt.py'),
         pdfPath,
         txtPath
       ], (error, stdout, stderr) => {
@@ -178,6 +178,43 @@ app.post('/api/feedback', express.json(), async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to send feedback.' });
+  }
+});
+
+// DOCX to PDF using Pandoc (temp files)
+app.post('/api/docx-to-pdf-pandoc', upload.single('docx'), async (req, res) => {
+  if (!req.file) return res.status(400).send('No DOCX file uploaded.');
+
+  const tmpDir = os.tmpdir();
+  const docxPath = path.join(tmpDir, `input_${Date.now()}.docx`);
+  const pdfPath = path.join(tmpDir, `output_${Date.now()}.pdf`);
+
+  try {
+    // Write DOCX buffer to temp file
+    fs.writeFileSync(docxPath, req.file.buffer);
+
+    // Call Pandoc to convert DOCX to PDF
+    await new Promise((resolve, reject) => {
+      execFile('pandoc', [docxPath, '-o', pdfPath], (error, stdout, stderr) => {
+        if (error) {
+          console.error(stderr);
+          return reject(error);
+        }
+        resolve();
+      });
+    });
+
+    // Read the PDF file and send it
+    const pdfBuffer = fs.readFileSync(pdfPath);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=converted.pdf');
+    res.send(pdfBuffer);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Failed to convert DOCX to PDF with Pandoc.');
+  } finally {
+    fs.unlink(docxPath, () => {});
+    fs.unlink(pdfPath, () => {});
   }
 });
 
