@@ -61,7 +61,7 @@ app.post('/api/pdf-to-docx', upload.single('pdf'), async (req, res) => {
     // Call the Python script
     await new Promise((resolve, reject) => {
       execFile('python3', [
-        path.join(__dirname, 'pdf2docx_convert.py'),
+        path.join(__dirname, 'python', 'pdf2docx_convert.py'),
         pdfPath,
         docxPath
       ], (error, stdout, stderr) => {
