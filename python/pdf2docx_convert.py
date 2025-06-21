@@ -10,6 +10,11 @@ docx_path = sys.argv[2]
 
 print("Converting:", pdf_path, "to", docx_path)
 
-cv = Converter(pdf_path)
-cv.convert(docx_path, start=0, end=None)
-cv.close()
+try:
+    cv = Converter(pdf_path)
+    cv.convert(docx_path, start=0, end=None)
+    cv.close()
+    print("Conversion successful! Output saved to:", docx_path)
+except Exception as e:
+    print("Error during conversion:", e)
+    sys.exit(2)
