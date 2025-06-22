@@ -31,7 +31,7 @@
     "nodemailer": "^7.0.3",
     "pdf-parse": "^1.1.1",
     "pdfkit": "^0.17.1",
-    "puppeteer": "^24.10.1"
+    "puppeteer": "^24.10.2"
   },
   "type": "commonjs",
   "devDependencies": {
