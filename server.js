@@ -117,7 +117,6 @@ app.post('/api/docx-to-pdf', upload.single('docx'), async (req, res) => {
 
     // Launch Puppeteer and generate PDF from HTML
     const browser = await puppeteer.launch({
-      executablePath: '/usr/bin/chromium-browser', // or the path to your Chrome/Chromium
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
