@@ -108,32 +108,6 @@ app.post('/api/pdf-to-docx', upload.single('pdf'), async (req, res) => {
   }
 });
 
-// DOCX to PDF (Mammoth + Puppeteer, in-memory)
-app.post('/api/docx-to-pdf', upload.single('docx'), async (req, res) => {
-  if (!req.file) return res.status(400).send('No DOCX file uploaded.');
-  try {
-    // Convert DOCX buffer to HTML
-    const { value: html } = await mammoth.convertToHtml({ buffer: req.file.buffer });
-
-    // Launch Puppeteer and generate PDF from HTML
-    const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-    const pdfBuffer = await page.pdf({ format: 'A4' });
-    await browser.close();
-
-    // Send PDF buffer as response
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=converted.pdf');
-    res.send(pdfBuffer);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Failed to convert DOCX to PDF.');
-  }
-});
-
 // PDF to Text conversion endpoint
 app.post('/api/pdf-to-text', upload.single('pdf'), async (req, res) => {
   if (!req.file) return res.status(400).send('No PDF file uploaded.');
@@ -218,3 +192,31 @@ app.post('/api/docx-to-pdf-pandoc', upload.single('docx'), async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+/**
+DOCX to PDF (Mammoth + Puppeteer, in-memory)
+app.post('/api/docx-to-pdf', upload.single('docx'), async (req, res) => {
+  if (!req.file) return res.status(400).send('No DOCX file uploaded.');
+  try {
+    // Convert DOCX buffer to HTML
+    const { value: html } = await mammoth.convertToHtml({ buffer: req.file.buffer });
+
+    // Launch Puppeteer and generate PDF from HTML
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+    const pdfBuffer = await page.pdf({ format: 'A4' });
+    await browser.close();
+
+    // Send PDF buffer as response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=converted.pdf');
+    res.send(pdfBuffer);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Failed to convert DOCX to PDF.');
+  }
+});
+ */

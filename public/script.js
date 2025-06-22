@@ -83,9 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Text to PDF Form
   const textToPDFForm = document.getElementById('textToPDFForm');
-  if (textToPDFForm) {
+  const textToPDFModal = document.getElementById('textToPDFModal');
+  if (textToPDFForm && textToPDFModal) {
     textToPDFForm.addEventListener('submit', async function(e) {
       e.preventDefault();
+      textToPDFModal.style.display = 'none'; // Hide modal immediately
 
       const text = document.getElementById('textInput').value;
       const fontSize = document.querySelector('input[name="fontSize"]:checked').value;
@@ -121,40 +123,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // PDF to DOCX Form
   const pdfToDocxForm = document.getElementById('pdfToDocxForm');
-  if (pdfToDocxForm) {
+  const pdfToDocxModal = document.getElementById('pdfToDocxModal');
+  if (pdfToDocxForm && pdfToDocxModal) {
     pdfToDocxForm.addEventListener('submit', async function(e) {
       e.preventDefault();
+      pdfToDocxModal.style.display = 'none'; // Hide modal immediately
+
       const fileInput = document.getElementById('pdfFile');
       if (!fileInput.files.length) return;
+
+      // Show loading
+      document.getElementById('loadingModal').style.display = 'block';
+
       const formData = new FormData();
       formData.append('pdf', fileInput.files[0]);
-
       const res = await fetch('/api/pdf-to-docx', { method: 'POST', body: formData });
       if (res.ok) {
-          const blob = await res.blob();
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'converted.docx';
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'converted.docx';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+        setTimeout(() => {
+          document.getElementById('loadingModal').style.display = 'none';
           showSuccessModal('DOCX successfully generated and downloaded.');
+        }, 6000);
+      } else {
+        document.getElementById('loadingModal').style.display = 'none';
+        alert('Conversion failed.');
       }
     });
   }
 
   // DOCX to PDF Form
   const docxToPDFForm = document.getElementById('docxToPDFForm');
-  if (docxToPDFForm) {
+  const docxToPDFModal = document.getElementById('docxToPDFModal');
+  if (docxToPDFForm && docxToPDFModal) {
     docxToPDFForm.addEventListener('submit', async function(e) {
       e.preventDefault();
+      docxToPDFModal.style.display = 'none'; // Hide modal immediately
+
       const fileInput = document.getElementById('docxFile');
       if (!fileInput.files.length) return;
+
+      // Show loading spinner/message
+      document.getElementById('loadingModal').style.display = 'block';
+
       const formData = new FormData();
       formData.append('docx', fileInput.files[0]);
+      const res = await fetch('/api/docx-to-pdf-pandoc', { method: 'POST', body: formData });
 
-      const res = await fetch('/api/docx-to-pdf', { method: 'POST', body: formData });
       if (res.ok) {
           const blob = await res.blob();
           const url = window.URL.createObjectURL(blob);
@@ -164,40 +187,66 @@ document.addEventListener('DOMContentLoaded', function() {
           document.body.appendChild(a);
           a.click();
           a.remove();
-          showSuccessModal('PDF successfully generated and downloaded.');
+          window.URL.revokeObjectURL(url);
+
+          // Wait 5-8 seconds (simulate lazy loading)
+          setTimeout(() => {
+              document.getElementById('loadingModal').style.display = 'none';
+              showSuccessModal('PDF successfully generated and downloaded.');
+          }, 6000); // 6000 ms = 6 seconds (adjust as needed)
+      } else {
+          document.getElementById('loadingModal').style.display = 'none';
+          alert('Conversion failed.');
       }
     });
   }
 
   const pdfToTextForm = document.getElementById('pdfToTextForm');
-  if (pdfToTextForm) {
+  const pdfToTextModal = document.getElementById('pdfToTextModal');
+  if (pdfToTextForm && pdfToTextModal) {
     pdfToTextForm.addEventListener('submit', async function(e) {
       e.preventDefault();
+      pdfToTextModal.style.display = 'none'; // Hide modal immediately
+
       const fileInput = document.getElementById('pdfToTextFile');
       if (!fileInput.files.length) return;
+
+      // Show loading
+      document.getElementById('loadingModal').style.display = 'block';
+
       const formData = new FormData();
       formData.append('pdf', fileInput.files[0]);
-
       const res = await fetch('/api/pdf-to-text', { method: 'POST', body: formData });
       if (res.ok) {
-          const blob = await res.blob();
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'converted.txt';
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'converted.txt';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+        setTimeout(() => {
+          document.getElementById('loadingModal').style.display = 'none';
           showSuccessModal('Text file successfully generated and downloaded.');
+        }, 6000); // 6 seconds, adjust as needed
+      } else {
+        document.getElementById('loadingModal').style.display = 'none';
+        alert('Conversion failed.');
       }
     });
   }
 
   // PDF to Image Form
   const pdfToImageForm = document.getElementById('pdfToImageForm');
-  if (pdfToImageForm) {
+  const pdfToImageModal = document.getElementById('pdfToImageModal');
+  if (pdfToImageForm && pdfToImageModal) {
     pdfToImageForm.addEventListener('submit', async function(e) {
       e.preventDefault();
+      pdfToImageModal.style.display = 'none'; // Hide modal immediately
+
       const fileInput = document.getElementById('pdfToImageFile');
       if (!fileInput.files.length) {
         alert('Please select a PDF file.');
@@ -228,9 +277,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Image to PDF Form
   const imageToPDFForm = document.getElementById('imageToPDFForm');
-  if (imageToPDFForm) {
+  const imageToPDFModal = document.getElementById('imageToPDFModal');
+  if (imageToPDFForm && imageToPDFModal) {
     imageToPDFForm.addEventListener('submit', async function(e) {
       e.preventDefault();
+      imageToPDFModal.style.display = 'none'; // Hide modal immediately
+
       const fileInput = document.getElementById('imageToPDFFile');
       if (!fileInput.files.length) {
         alert('Please select an image file.');
@@ -333,9 +385,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const msg = modal.querySelector('p');
     msg.innerHTML = `<strong>Success!</strong> ${message}`;
     modal.style.display = 'block';
-  }
+}
 
-  document.getElementById('closeSuccessModal').onclick = function() {
+document.getElementById('closeSuccessModal').onclick = function() {
     document.getElementById('successModal').style.display = 'none';
-  };
+};
 });
