@@ -2,7 +2,10 @@ services:
   - type: web
     name: pdfme-app
     env: node
-    buildCommand: 'npm install && pip install -r requirements.txt'
+    buildCommand: |
+      apt-get update
+      apt-get install -y pandoc
+      npm install
     startCommand: 'node server.js'
     envVars:
       - key: PYTHON_VERSION
