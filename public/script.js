@@ -125,29 +125,21 @@ document.addEventListener('DOMContentLoaded', function() {
     pdfToDocxForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       const fileInput = document.getElementById('pdfFile');
-      if (!fileInput.files.length) {
-        alert('Please select a PDF file.');
-        return;
-      }
+      if (!fileInput.files.length) return;
       const formData = new FormData();
       formData.append('pdf', fileInput.files[0]);
-      const response = await fetch('/api/pdf-to-docx', {
-        method: 'POST',
-        body: formData
-      });
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'converted.docx';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-        document.getElementById('pdfToDocxModal').style.display = 'none';
-      } else {
-        alert('Failed to convert PDF to DOCX.');
+
+      const res = await fetch('/api/pdf-to-docx', { method: 'POST', body: formData });
+      if (res.ok) {
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'converted.docx';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          showSuccessModal('DOCX successfully generated and downloaded.');
       }
     });
   }
@@ -158,85 +150,48 @@ document.addEventListener('DOMContentLoaded', function() {
     docxToPDFForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       const fileInput = document.getElementById('docxFile');
-      if (!fileInput.files.length) {
-        alert('Please select a DOCX file.');
-        return;
-      }
+      if (!fileInput.files.length) return;
       const formData = new FormData();
       formData.append('docx', fileInput.files[0]);
-      const response = await fetch('/api/docx-to-pdf', {
-        method: 'POST',
-        body: formData
-      });
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'converted.pdf';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-        document.getElementById('docxToPDFModal').style.display = 'none';
-      } else {
-        alert('Failed to convert DOCX to PDF.');
+
+      const res = await fetch('/api/docx-to-pdf', { method: 'POST', body: formData });
+      if (res.ok) {
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'converted.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          showSuccessModal('PDF successfully generated and downloaded.');
       }
     });
   }
-const pdfToTextForm = document.getElementById('pdfToTextForm');
-if (pdfToTextForm) {
-  pdfToTextForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const fileInput = document.getElementById('pdfToTextFile');
-    const submitBtn = pdfToTextForm.querySelector('button[type="submit"]');
 
-    if (!fileInput.files.length) {
-      alert('Please select a PDF file.');
-      return;
-    }
+  const pdfToTextForm = document.getElementById('pdfToTextForm');
+  if (pdfToTextForm) {
+    pdfToTextForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const fileInput = document.getElementById('pdfToTextFile');
+      if (!fileInput.files.length) return;
+      const formData = new FormData();
+      formData.append('pdf', fileInput.files[0]);
 
-    const formData = new FormData();
-    formData.append('pdf', fileInput.files[0]);
-    submitBtn.disabled = true;
-
-    try {
-      const response = await fetch(`/api/pdf-to-text?_=${Date.now()}`, {
-        method: 'POST',
-        body: formData
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'converted.txt';
-        document.body.appendChild(a);
-
-        // Close modal first
-        document.getElementById('pdfToTextModal').style.display = 'none';
-
-        // Delay the download trigger to allow modal to fully disappear
-        setTimeout(() => {
+      const res = await fetch('/api/pdf-to-text', { method: 'POST', body: formData });
+      if (res.ok) {
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'converted.txt';
+          document.body.appendChild(a);
           a.click();
           a.remove();
-          window.URL.revokeObjectURL(url);
-        }, 150);
-      } else {
-        alert('Failed to extract text from PDF.');
+          showSuccessModal('Text file successfully generated and downloaded.');
       }
-    } catch (err) {
-      console.error(err);
-      alert('An error occurred. Try again.');
-    } finally {
-      submitBtn.disabled = false;
-      fileInput.value = '';
-    }
-  });
-}
-
-
+    });
+  }
 
   // PDF to Image Form
   const pdfToImageForm = document.getElementById('pdfToImageForm');
@@ -372,4 +327,15 @@ if (pdfToTextForm) {
       }
     });
   }
+
+  function showSuccessModal(message) {
+    const modal = document.getElementById('successModal');
+    const msg = modal.querySelector('p');
+    msg.innerHTML = `<strong>Success!</strong> ${message}`;
+    modal.style.display = 'block';
+  }
+
+  document.getElementById('closeSuccessModal').onclick = function() {
+    document.getElementById('successModal').style.display = 'none';
+  };
 });

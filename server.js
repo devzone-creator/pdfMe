@@ -10,6 +10,9 @@ const fs = require('fs');
 const { execFile } = require('child_process');
 const os = require('os');
 const nodemailer = require('nodemailer');
+const axios = require('axios');
+const pdfParse = require('pdf-parse');
+const { Document, Packer, Paragraph } = require('docx');
 
 
 const app = express();
@@ -17,6 +20,12 @@ const PORT = process.env.PORT || 5500;
 
 // Use memory storage for multer
 const upload = multer({ storage: multer.memoryStorage() });
+
+// Log received file information (for debugging)
+app.use((req, res, next) => {
+  console.log('Received file:', req.file ? req.file.originalname : 'none', 'size:', req.file ? req.file.size : 0);
+  next();
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -49,42 +58,53 @@ app.post('/api/pdf', (req, res) => {
 app.post('/api/pdf-to-docx', upload.single('pdf'), async (req, res) => {
   if (!req.file) return res.status(400).send('No PDF file uploaded.');
 
-  // Create temp file paths
-  const tmpDir = os.tmpdir();
-  const pdfPath = path.join(tmpDir, `input_${Date.now()}.pdf`);
-  const docxPath = path.join(tmpDir, `output_${Date.now()}.docx`);
-
   try {
-    // Write PDF buffer to temp file
-    fs.writeFileSync(pdfPath, req.file.buffer);
+    // Try to extract text
+    const data = await pdfParse(req.file.buffer);
 
-    // Call the Python script
-    await new Promise((resolve, reject) => {
-      execFile('python3', [
-        path.join(__dirname, 'python', 'pdf2docx_convert.py'),
-        pdfPath,
-        docxPath
-      ], (error, stdout, stderr) => {
-        if (error) {
-          console.error(stderr);
-          return reject(error);
-        }
-        resolve();
+    if (data.text && data.text.trim().length > 0) {
+      // Text-based PDF: convert using docx
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: data.text.split('\n').map(line => new Paragraph(line)),
+        }],
       });
-    });
 
-    // Read the DOCX file and send it
-    const docxBuffer = fs.readFileSync(docxPath);
-    res.setHeader('Content-Disposition', 'attachment; filename=converted.docx');
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    res.send(docxBuffer);
+      const docxBuffer = await Packer.toBuffer(doc);
+      res.setHeader('Content-Disposition', 'attachment; filename=converted.docx');
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+      return res.send(docxBuffer);
+    } else {
+      // Not text-based: use PDF.co API
+      const pdfBase64 = req.file.buffer.toString('base64');
+      const response = await axios.post(
+        'https://api.pdf.co/v1/pdf/convert/to/doc',
+        {
+          name: 'converted.docx',
+          file: pdfBase64,
+        },
+        {
+          headers: {
+            'x-api-key': "sample@sample.com_123a4b567c890d123e456f789g01",
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.data && response.data.url) {
+        // Download the DOCX file from PDF.co
+        const docxResp = await axios.get(response.data.url, { responseType: 'arraybuffer' });
+        res.setHeader('Content-Disposition', 'attachment; filename=converted.docx');
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        return res.send(docxResp.data);
+      } else {
+        return res.status(500).send('PDF.co conversion failed.');
+      }
+    }
   } catch (err) {
     console.error(err);
     res.status(500).send('Failed to convert PDF to DOCX.');
-  } finally {
-    // Clean up temp files
-    fs.unlink(pdfPath, () => {});
-    fs.unlink(docxPath, () => {});
   }
 });
 
@@ -118,37 +138,14 @@ app.post('/api/docx-to-pdf', upload.single('docx'), async (req, res) => {
 app.post('/api/pdf-to-text', upload.single('pdf'), async (req, res) => {
   if (!req.file) return res.status(400).send('No PDF file uploaded.');
 
-  const tmpDir = os.tmpdir();
-  const pdfPath = path.join(tmpDir, `input_${Date.now()}.pdf`);
-  const txtPath = path.join(tmpDir, `output_${Date.now()}.txt`);
-
   try {
-    fs.writeFileSync(pdfPath, req.file.buffer);
-
-    await new Promise((resolve, reject) => {
-      execFile('python3', [
-        path.join(__dirname, 'python', 'pdf2txt.py'),
-        pdfPath,
-        txtPath
-      ], (error, stdout, stderr) => {
-        if (error) {
-          console.error(stderr);
-          return reject(error);
-        }
-        resolve();
-      });
-    });
-
-    const txtBuffer = fs.readFileSync(txtPath);
+    const data = await pdfParse(req.file.buffer);
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Content-Disposition', 'attachment; filename=converted.txt');
-    res.send(txtBuffer);
+    res.send(data.text || '');
   } catch (err) {
     console.error(err);
     res.status(500).send('Failed to extract text from PDF.');
-  } finally {
-    fs.unlink(pdfPath, () => {});
-    fs.unlink(txtPath, () => {});
   }
 });
 
@@ -220,10 +217,4 @@ app.post('/api/docx-to-pdf-pandoc', upload.single('docx'), async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
-
-// Log received file information (for debugging)
-app.use((req, res, next) => {
-  console.log('Received file:', req.file ? req.file.originalname : 'none', 'size:', req.file ? req.file.size : 0);
-  next();
 });
