@@ -222,10 +222,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'converted.txt';
+        a.download = 'converted.txt'; // This will prompt for filename/location
+        a.target = '_blank';
+        a.rel = 'noopener';
         document.body.appendChild(a);
         a.click();
-        a.remove();
+        document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
 
         setTimeout(() => {
