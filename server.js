@@ -166,7 +166,7 @@ app.post('/api/docx-to-pdf-pandoc', upload.single('docx'), async (req, res) => {
 
     // Call Pandoc to convert DOCX to PDF
     await new Promise((resolve, reject) => {
-      execFile('pandoc', [docxPath, '-o', pdfPath], (error, stdout, stderr) => {
+      execFile('pandoc', [docxPath, '-o', pdfPath, '--pdf-engine=xelatex'], (error, stdout, stderr) => {
         if (error) {
           console.error(stderr);
           return reject(error);
