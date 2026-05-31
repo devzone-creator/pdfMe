@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: pdfme
+    env: node
+    plan: standard
+    buildCommand: npm install --production --omit=dev
+    startCommand: node server.js
+    healthCheckPath: /
+    healthCheckInterval: 300
+    autoDeploy: true
+    
+    # Pre-deploy optimization
+    preDeployCommand: |
+      npm ci --production --omit=dev --legacy-peer-deps
+    
+    # Environment variables for performance
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=512
+      - key: PORT
+        value: 3000
+    
+    # Instance settings
+    numInstances: 1
+    
+    # Build caching
+    buildCache:
+      enabled: true
+      paths:
+        - node_modules
+    
+    # Graceful shutdown
+    maxShutdownDelay: 30
+
+  # Optional: Redis cache for session management
+  - type: redis
+    name: pdfme-cache
+    plan: free
+    maxmemoryPolicy: allkeys-lru
