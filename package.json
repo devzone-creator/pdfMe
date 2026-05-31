@@ -12,13 +12,21 @@
     "type": "git",
     "url": "git+https://github.com/devzone-creator/pdfMe.git"
   },
-  "keywords": [],
+  "keywords": [
+    "pdf",
+    "converter",
+    "docx"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/devzone-creator/pdfMe/issues"
   },
   "homepage": "https://github.com/devzone-creator/pdfMe#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "dependencies": {
     "axios": "^1.10.0",
     "cors": "^2.8.5",
@@ -30,8 +38,7 @@
     "multer": "^2.0.1",
     "nodemailer": "^7.0.3",
     "pdf-parse": "^1.1.1",
-    "pdfkit": "^0.17.1",
-    "puppeteer": "^24.10.2"
+    "pdfkit": "^0.17.1"
   },
   "type": "commonjs",
   "devDependencies": {
