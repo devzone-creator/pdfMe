@@ -1,7 +1,22 @@
 {
-  "name": "pdfme",
-  "version": "1.0.0",
-  "description": "A pdf converter app made with html, css and js and uses js as backend, this is a free platform form users who wants to convert from pdf to docx",
+  "name": "file-frenzy",
+  "version": "1.1.0",
+  "description": "Privacy-first document conversion platform. Convert PDFs to DOCX, TXT, and more. No cloud uploads. Open-source & self-hostable.",
+  "keywords": [
+    "pdf",
+    "converter",
+    "docx",
+    "file-conversion",
+    "privacy",
+    "open-source",
+    "document-processing",
+    "pdf-to-docx",
+    "pdf-to-text",
+    "batch-processing",
+    "rest-api",
+    "nodejs",
+    "express"
+  ],
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,17 +27,12 @@
     "type": "git",
     "url": "git+https://github.com/devzone-creator/pdfMe.git"
   },
-  "keywords": [
-    "pdf",
-    "converter",
-    "docx"
-  ],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/devzone-creator/pdfMe/issues"
   },
   "homepage": "https://github.com/devzone-creator/pdfMe#readme",
+  "author": "devzone-creator",
+  "license": "MIT",
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
@@ -40,8 +50,8 @@
     "pdf-parse": "^1.1.1",
     "pdfkit": "^0.17.1"
   },
-  "type": "commonjs",
   "devDependencies": {
     "nodemon": "^3.1.10"
-  }
+  },
+  "type": "commonjs"
 }
