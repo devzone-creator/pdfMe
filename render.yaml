@@ -1,17 +1,16 @@
 services:
   - type: web
-    name: pdfme
+    name: file-frenzy
     env: node
     plan: standard
-    buildCommand: npm install --production --omit=dev
+    buildCommand: npm install --legacy-peer-deps
     startCommand: node server.js
-    healthCheckPath: /
+    healthCheckPath: /health
     healthCheckInterval: 300
     autoDeploy: true
     
     # Pre-deploy optimization
-    preDeployCommand: |
-      npm ci --production --omit=dev --legacy-peer-deps
+    preDeployCommand: npm ci --legacy-peer-deps
     
     # Environment variables for performance
     envVars:
@@ -33,9 +32,3 @@ services:
     
     # Graceful shutdown
     maxShutdownDelay: 30
-
-  # Optional: Redis cache for session management
-  - type: redis
-    name: pdfme-cache
-    plan: free
-    maxmemoryPolicy: allkeys-lru
