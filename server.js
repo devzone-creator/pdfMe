@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Use memory storage for multer
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } });
 
 // Minimal request logger in non-production to reduce startup I/O
 if (process.env.NODE_ENV !== 'production') {
@@ -21,7 +21,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
@@ -38,6 +38,24 @@ app.get('/', (req, res) => {
 // About page
 app.get('/about', (req, res) => {
   res.render('about');
+});
+
+// Editor page (WYSIWYG/canvas)
+app.get('/editor', (req, res) => {
+  res.render('editor');
+});
+
+// Import DOCX to HTML for editor
+app.post('/editor/import-docx', upload.single('docx'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  try {
+    const mammoth = require('mammoth');
+    const result = await mammoth.convertToHtml({ buffer: req.file.buffer });
+    res.json({ html: result.value });
+  } catch (err) {
+    console.error('Import docx error:', err);
+    res.status(500).json({ error: 'Failed to convert DOCX' });
+  }
 });
 
 // Text to PDF conversion (lazy-load pdfkit)
