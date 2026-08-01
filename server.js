@@ -10,7 +10,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Use memory storage for multer
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } });
+const upload = multer({ 
+  storage: multer.memoryStorage(), 
+  limits: { fileSize: 50 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowedMimes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Invalid file type: ${file.mimetype}`));
+    }
+  }
+});
 
 // Minimal request logger in non-production to reduce startup I/O
 if (process.env.NODE_ENV !== 'production') {
@@ -27,7 +38,28 @@ app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint (keeps uptime monitors happy)
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    version: '1.1.0',
+    service: 'file-frenzy'
+  });
+});
+
+// API Status endpoint
+app.get('/api/status', (req, res) => {
+  res.json({
+    status: 'operational',
+    uptime: process.uptime(),
+    conversions_available: [
+      'pdf-to-docx',
+      'pdf-to-text',
+      'text-to-pdf',
+      'docx-to-pdf'
+    ],
+    max_file_size: '50MB',
+    processing: 'in-memory'
+  });
 });
 
 // Homepage
@@ -60,14 +92,24 @@ app.post('/editor/import-docx', upload.single('docx'), async (req, res) => {
 
 // Text to PDF conversion (lazy-load pdfkit)
 app.post('/api/pdf', (req, res) => {
-  const PDFDocument = require('pdfkit');
-  const { text, fontSize, textAlign } = req.body;
-  const doc = new PDFDocument();
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', 'attachment; filename=converted.pdf');
-  doc.pipe(res);
-  doc.fontSize(Number(fontSize) || 12).text(text || '', { align: textAlign || 'left' });
-  doc.end();
+  try {
+    const PDFDocument = require('pdfkit');
+    const { text, fontSize, textAlign } = req.body;
+    
+    if (!text) {
+      return res.status(400).json({ error: 'Text content is required' });
+    }
+
+    const doc = new PDFDocument();
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=converted.pdf');
+    doc.pipe(res);
+    doc.fontSize(Number(fontSize) || 12).text(text, { align: textAlign || 'left' });
+    doc.end();
+  } catch (err) {
+    console.error('Text to PDF error:', err);
+    res.status(500).json({ error: 'Failed to convert text to PDF' });
+  }
 });
 
 // PDF to DOCX conversion (lazy-load heavy libs only when needed)
@@ -87,7 +129,7 @@ app.post('/api/pdf-to-docx', upload.single('pdf'), async (req, res) => {
       const doc = new Document({
         sections: [{
           properties: {},
-          children: data.text.split('\n').map(line => new Paragraph(line)),
+          children: data.text.split('\n').map(line => new Paragraph(line || ' ')),
         }],
       });
 
@@ -144,6 +186,55 @@ app.post('/api/pdf-to-text', upload.single('pdf'), async (req, res) => {
   }
 });
 
+// Batch PDF to DOCX conversion
+app.post('/api/batch/pdf-to-docx', upload.array('pdfs', 10), async (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: 'No PDF files uploaded' });
+  }
+
+  try {
+    const JSZip = require('jszip');
+    const pdfParse = require('pdf-parse');
+    const { Document, Packer, Paragraph } = require('docx');
+    const axios = require('axios');
+
+    const zip = new JSZip();
+    const conversions = req.files.map(async (file) => {
+      try {
+        const data = await pdfParse(file.buffer);
+        
+        if (data.text && data.text.trim().length > 0) {
+          const doc = new Document({
+            sections: [{
+              properties: {},
+              children: data.text.split('\n').map(line => new Paragraph(line || ' ')),
+            }],
+          });
+
+          const docxBuffer = await Packer.toBuffer(doc);
+          const filename = file.originalname.replace('.pdf', '.docx');
+          zip.file(filename, docxBuffer);
+          
+          return { file: filename, status: 'success' };
+        }
+      } catch (err) {
+        console.error(`Error converting ${file.originalname}:`, err);
+        return { file: file.originalname, status: 'error', message: err.message };
+      }
+    });
+
+    const results = await Promise.all(conversions);
+    const zipBuffer = await zip.generateAsync({ type: 'nodebuffer' });
+
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', 'attachment; filename=converted-batch.zip');
+    res.send(zipBuffer);
+  } catch (err) {
+    console.error('Batch conversion error:', err);
+    res.status(500).json({ error: 'Batch conversion failed', details: err.message });
+  }
+});
+
 // Feedback email endpoint (lazy-load nodemailer)
 app.post('/api/feedback', express.json(), async (req, res) => {
   const { name, email, message } = req.body;
@@ -167,13 +258,13 @@ app.post('/api/feedback', express.json(), async (req, res) => {
   const mailOptions = {
     from: email,
     to: process.env.GMAIL_USER || 'frenzyfile@gmail.com',
-    subject: `FileFrenzy Feedback from ${name}`,
-    text: `Name: ${name}\n\n${message}`
+    subject: `file-frenzy Feedback from ${name}`,
+    text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    res.json({ success: true, message: 'Feedback sent!' });
+    res.json({ success: true, message: 'Feedback sent successfully!' });
   } catch (err) {
     console.error('Email sending error:', err);
     res.status(500).json({ success: false, message: 'Failed to send feedback.' });
@@ -221,11 +312,24 @@ app.post('/api/docx-to-pdf-pandoc', upload.single('docx'), async (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
-  res.status(500).json({ success: false, message: 'Internal server error.' });
+  res.status(500).json({ 
+    success: false, 
+    message: 'Internal server error.',
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Endpoint not found' });
 });
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`✅ file-frenzy server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔌 API available at http://localhost:${PORT}/api`);
+  console.log(`📊 Health check: http://localhost:${PORT}/health`);
 });
+
+module.exports = app;
