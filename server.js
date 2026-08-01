@@ -1,17 +1,10 @@
 const express = require('express');
 const multer = require('multer');
-const PDFDocument = require('pdfkit');
 const cors = require('cors');
 const path = require('path');
-const mammoth = require('mammoth');
-const morgan = require('morgan');
 const fs = require('fs');
 const { execFile } = require('child_process');
 const os = require('os');
-const nodemailer = require('nodemailer');
-const axios = require('axios');
-const pdfParse = require('pdf-parse');
-const { Document, Packer, Paragraph } = require('docx');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,20 +12,23 @@ const PORT = process.env.PORT || 3000;
 // Use memory storage for multer
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Middleware logging for debugging
-app.use((req, res, next) => {
-  console.log('Received file:', req.file ? req.file.originalname : 'none', 'size:', req.file ? req.file.size : 0);
-  next();
-});
+// Minimal request logger in non-production to reduce startup I/O
+if (process.env.NODE_ENV !== 'production') {
+  const morgan = require('morgan');
+  app.use(morgan('dev'));
+}
 
-// Set up view engine and static files
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+
+// Health check endpoint (keeps uptime monitors happy)
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
 // Homepage
 app.get('/', (req, res) => {
@@ -44,13 +40,9 @@ app.get('/about', (req, res) => {
   res.render('about');
 });
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
-// Text to PDF conversion
+// Text to PDF conversion (lazy-load pdfkit)
 app.post('/api/pdf', (req, res) => {
+  const PDFDocument = require('pdfkit');
   const { text, fontSize, textAlign } = req.body;
   const doc = new PDFDocument();
   res.setHeader('Content-Type', 'application/pdf');
@@ -60,11 +52,15 @@ app.post('/api/pdf', (req, res) => {
   doc.end();
 });
 
-// PDF to DOCX conversion
+// PDF to DOCX conversion (lazy-load heavy libs only when needed)
 app.post('/api/pdf-to-docx', upload.single('pdf'), async (req, res) => {
   if (!req.file) return res.status(400).send('No PDF file uploaded.');
 
   try {
+    const pdfParse = require('pdf-parse');
+    const axios = require('axios');
+    const { Document, Packer, Paragraph } = require('docx');
+
     // Try to extract text from PDF
     const data = await pdfParse(req.file.buffer);
 
@@ -114,11 +110,12 @@ app.post('/api/pdf-to-docx', upload.single('pdf'), async (req, res) => {
   }
 });
 
-// PDF to Text conversion
+// PDF to Text conversion (lazy-load pdf-parse)
 app.post('/api/pdf-to-text', upload.single('pdf'), async (req, res) => {
   if (!req.file) return res.status(400).send('No PDF file uploaded.');
 
   try {
+    const pdfParse = require('pdf-parse');
     const data = await pdfParse(req.file.buffer);
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Content-Disposition', 'attachment; filename=converted.txt');
@@ -129,7 +126,7 @@ app.post('/api/pdf-to-text', upload.single('pdf'), async (req, res) => {
   }
 });
 
-// Feedback email endpoint
+// Feedback email endpoint (lazy-load nodemailer)
 app.post('/api/feedback', express.json(), async (req, res) => {
   const { name, email, message } = req.body;
 
@@ -137,6 +134,8 @@ app.post('/api/feedback', express.json(), async (req, res) => {
   if (!name || !email || !message) {
     return res.status(400).json({ success: false, message: 'All fields are required.' });
   }
+
+  const nodemailer = require('nodemailer');
 
   // Configure transporter for Gmail
   const transporter = nodemailer.createTransport({
