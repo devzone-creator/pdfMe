@@ -28,22 +28,20 @@ build
 # Testing
 coverage
 .nyc_output
+__tests__
 
-# Environment files (except if you need them)
-.env
+# Environment files
 .env.local
 .env.development.local
 .env.test.local
-
-# Documentation
-README.md
-docs
 
 # CI/CD
 .travis.yml
 .gitlab-ci.yml
 
 # IDEs
-.vscode
 .idea
 *.iml
+
+# Admin files
+pdfMe-admin-dashboard.zip
