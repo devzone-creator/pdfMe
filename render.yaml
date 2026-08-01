@@ -3,14 +3,11 @@ services:
     name: file-frenzy
     env: node
     plan: standard
-    buildCommand: npm install --legacy-peer-deps
+    buildCommand: npm install
     startCommand: node server.js
     healthCheckPath: /health
     healthCheckInterval: 300
     autoDeploy: true
-    
-    # Pre-deploy optimization
-    preDeployCommand: npm ci --legacy-peer-deps
     
     # Environment variables for performance
     envVars:
@@ -23,12 +20,6 @@ services:
     
     # Instance settings
     numInstances: 1
-    
-    # Build caching
-    buildCache:
-      enabled: true
-      paths:
-        - node_modules
     
     # Graceful shutdown
     maxShutdownDelay: 30
